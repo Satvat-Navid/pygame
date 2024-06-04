@@ -18,6 +18,8 @@ class AlienInvasion:
         """Run the main loop for the game"""
         while True:
             self._check_events()
+            #update the plane imagne
+            self.ship.update()
             self._update_screen()
 
     def _check_events(self):
@@ -34,6 +36,10 @@ class AlienInvasion:
                 if event.key == pygame.K_LEFT:
                     #update the flag for moving
                     self.ship.moving_left = True
+                if event.key == pygame.K_UP:
+                    self.ship.up = True
+                if event.key == pygame.K_DOWN:
+                    self.ship.down = True
                 #check of key release
             elif event.type == pygame.KEYUP:
                 #check for the right arrow key
@@ -42,13 +48,15 @@ class AlienInvasion:
                 #check for the left arrow key
                 if event.key == pygame.K_LEFT:
                     self.ship.moving_left = False
+                if event.key == pygame.K_UP:
+                    self.ship.up = False
+                if event.key == pygame.K_DOWN:
+                    self.ship.down = False
 
     def _update_screen(self):
         self.screen.fill(self.settings.bg_color)
         #Drow the ship on screen
         self.ship.blitme()
-        #update the plane imagne
-        self.ship.update()
         #Drow the most recent of the screen.
         pygame.display.flip()
          

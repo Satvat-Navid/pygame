@@ -15,6 +15,8 @@ class Ship:
 
         self.moving_right = False
         self.moving_left = False
+        self.up = False
+        self.down = False
 
     def update(self):
         """Update the x coordinate of the the plane"""
@@ -22,6 +24,10 @@ class Ship:
             self.rect.x += 1
         elif self.moving_left:
             self.rect.x -= 1
+        elif self.up:
+            self.rect.y -= 1
+        elif self.down:
+            self.rect.y += 1
 
     def blitme(self):
         #Using the blit function to drow the plane on screen
