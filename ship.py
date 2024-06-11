@@ -4,6 +4,7 @@ class Ship:
     """Control all the funtions of ship"""
     def __init__(self,ai_game):
         self.screen = ai_game.screen
+        self.settings = ai_game.settings
         #We assign the rectangels of the screen to work with positions
         self.screen_rect = ai_game.screen.get_rect()
 
@@ -13,6 +14,8 @@ class Ship:
         #Setting the locaton of both the screen and the image rect.
         self.rect.midbottom = self.screen_rect.midbottom
 
+        self.x = float(self.rect.x)
+
         self.moving_right = False
         self.moving_left = False
         self.up = False
@@ -20,14 +23,12 @@ class Ship:
 
     def update(self):
         """Update the x coordinate of the the plane"""
-        if self.moving_right:
-            self.rect.x += 1
-        elif self.moving_left:
-            self.rect.x -= 1
-        elif self.up:
-            self.rect.y -= 1
-        elif self.down:
-            self.rect.y += 1
+        if self.moving_right and self.rect.x < (self.screen_rect.right - 55):
+            self.x += self.settings.ship_speed
+        elif self.moving_left and self.rect.x > 0:
+            self.x -= self.settings.ship_speed
+        
+        self.rect.x = (self.x)
 
     def blitme(self):
         #Using the blit function to drow the plane on screen
