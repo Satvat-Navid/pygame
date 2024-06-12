@@ -9,7 +9,7 @@ class Ship:
         self.screen_rect = ai_game.screen.get_rect()
 
         #Loading the image and getting its rect
-        self.image = pygame.image.load('Images\plane2.bmp')
+        self.image = pygame.image.load('Images\plane.bmp')
         self.rect = self.image.get_rect()
         #Setting the locaton of both the screen and the image rect.
         self.rect.midbottom = self.screen_rect.midbottom
