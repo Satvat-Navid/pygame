@@ -3,7 +3,7 @@ class Settings:
     def __init__(self):
         self.display_height = 600
         self.display_width = 849
-        self.night_mode = False
+        self.night_mode = True
         if self.night_mode:
             self.bg_color = (0, 0, 0)
             self.bullet_color = (0,255,0)

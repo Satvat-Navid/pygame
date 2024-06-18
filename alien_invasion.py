@@ -60,6 +60,12 @@ class AlienInvasion:
         elif event.key == pygame.K_LEFT:
             #update the flag for moving
             self.ship.moving_left = True
+        if event.key == pygame.K_UP:
+            #update the flag for moving
+            self.ship.moving_up = True
+        elif event.key == pygame.K_DOWN:
+            #update the flag for moving
+            self.ship.moving_down = True
         elif event.key == pygame.K_q:
             sys.exit()
         elif event.key == pygame.K_SPACE:
@@ -73,8 +79,13 @@ class AlienInvasion:
         #check for the left arrow key
         elif event.key == pygame.K_LEFT:
             self.ship.moving_left = False
+        if event.key == pygame.K_UP:
+            self.ship.moving_up = False
+        #check for the up arrow key
+        elif event.key == pygame.K_DOWN:
+            self.ship.moving_down = False
         elif event.key == pygame.K_SPACE:
-            # self._fire_bullet()
+            # self._fire_bullet() 
             self.fire = False
 
     def _fire_bullet(self):
