@@ -9,7 +9,10 @@ class Ship:
         self.screen_rect = ai_game.screen.get_rect()
 
         #Loading the image and getting its rect
-        self.image = pygame.image.load('Images\plane.bmp')
+        if self.settings.night_mode:
+            self.image = pygame.image.load('Images/plane1.bmp')
+        else:
+            self.image = pygame.image.load('Images/plane01.bmp')
         self.rect = self.image.get_rect()
         #Setting the locaton of both the screen and the image rect.
         self.rect.midbottom = self.screen_rect.midbottom
@@ -27,6 +30,8 @@ class Ship:
             self.x += self.settings.ship_speed
         elif self.moving_left and self.rect.x > 0:
             self.x -= self.settings.ship_speed
+        # elif self.up and self.rect.y < 0:
+        #     self.
         
         self.rect.x = (self.x)
 
