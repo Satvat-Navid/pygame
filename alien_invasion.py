@@ -1,6 +1,8 @@
 import sys
 import pygame
+from time import sleep
 from settings import Settings
+from game_stats import GameStats
 from ship import Ship
 from bullet import Bullet
 from alien import Alien
@@ -20,6 +22,7 @@ class AlienInvasion:
             (self.settings.display_width, self.settings.display_height))
         pygame.display.set_caption("Alien Invasion")
 
+        self.stats = GameStats(self)
         self.ship = Ship(self)
         self.bullets = pygame.sprite.Group()
         self.aliens = pygame.sprite.Group()
@@ -32,14 +35,13 @@ class AlienInvasion:
         """Run the main loop for the game"""
         while True:
             self._check_events()
-            #update the ship imagne
-            self.ship.update()
-            #Move the aliens
-            self._update_alien()
-            #update the bullet which is drawn by pygame.draw.rect
-            self._update_bullets()
-            if self.fire:
-                self._fire_bullet()
+            if self.stats.game_active:
+                #update the ship imagne
+                self.ship.update()
+                #Move the aliens
+                self._update_alien()
+                #update the bullet which is drawn by pygame.draw.rect
+                self._update_bullets()
             self._update_screen()
 
     def _check_events(self):
@@ -65,8 +67,7 @@ class AlienInvasion:
         elif event.key == pygame.K_q:
             sys.exit()
         elif event.key == pygame.K_SPACE:
-            # self._fire_bullet()
-            self.fire = True
+            self._fire_bullet()
             
     def _check_keyup_event(self,event):
         #check for the right arrow key
@@ -75,9 +76,6 @@ class AlienInvasion:
         #check for the left arrow key
         elif event.key == pygame.K_LEFT:
             self.ship.moving_left = False
-        elif event.key == pygame.K_SPACE:
-            # self._fire_bullet()
-            self.fire = False
 
     def _create_alien(self, alien_number, row_number):
         """Make the alien ship at differet location"""
@@ -85,7 +83,7 @@ class AlienInvasion:
         alien_width, alien_height = alien.rect.size
         alien.x = (alien_width) + ((2*alien_number)*alien_width)
         alien.rect.x = alien.x
-        alien.rect.y = (-300) + (2*row_number)*alien_height
+        alien.rect.y = (alien_height) + (2*row_number)*alien_height
         self.aliens.add(alien)
 
     def _create_fleet(self):
@@ -117,10 +115,40 @@ class AlienInvasion:
         """Update the coordinates of the aliens"""
         self._check_fleet_edges()
         self.aliens.update()
+        #look for the alien and ship collision
+        if pygame.sprite.spritecollideany(self.ship, self.aliens):
+            self._ship_hit()
+        #Check alien reached at bottom
+        self._check_alien_bottom()
+
+    def _ship_hit(self):
+        if self.stats.ship_left > 0:
+            self._update_screen()
+            #decrease the no. of ship
+            self.stats.ship_left -= 1
+            #get rid of the aliens and bullets
+            self.aliens.empty()
+            self.bullets.empty()
+            #Pause the game and center the ship
+            self._create_fleet()
+            self.ship.center_ship()
+            #Pause the ship 
+            sleep(1)
+        else:
+            self.stats.game_active = False
+
+    def _check_alien_bottom(self):
+        """Look for the alien to reach the bottom"""
+        screen_rect = self.screen.get_rect()
+        for alien in self.aliens.sprites():
+            if alien.rect.bottom >= screen_rect.bottom:
+                #treat as the ship get hit.
+                self._ship_hit()
+                break
 
     def _fire_bullet(self):
         """Make a bullet and add to the group"""
-        if len(self.bullets) <= self.settings.allowed_bullets-1:
+        if len(self.bullets) <= self.settings.allowed_bullets:
             new_bullet = Bullet(self) 
             self.bullets.add(new_bullet)
 
