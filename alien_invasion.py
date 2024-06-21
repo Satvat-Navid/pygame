@@ -8,6 +8,7 @@ from bullet import Bullet
 from alien import Alien
 from stars import Star
 from random import randint
+from button import Button
 
 class AlienInvasion:
     """Control all method for the game and its behavior"""
@@ -26,10 +27,12 @@ class AlienInvasion:
         self.ship = Ship(self)
         self.bullets = pygame.sprite.Group()
         self.aliens = pygame.sprite.Group()
+        self.aliens = pygame.sprite.Group()
         self.stars = pygame.sprite.Group()
         self._create_fleet()
         self._create_stars()
-        self.fire = False
+        self.play_button = Button(self, "Play")
+        # self.fire = False
 
     def run_game(self):
         """Run the main loop for the game"""
@@ -55,6 +58,19 @@ class AlienInvasion:
                 #check of key release
             elif event.type == pygame.KEYUP:
                 self._check_keyup_event(event)
+                #check the mouse button press and position
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_pos = pygame.mouse.get_pos()
+                self._check_mouse_pos(mouse_pos)
+
+    def _check_mouse_pos(self, pos):
+        """Start the game when clicked on play button"""
+        if self.play_button.rect.collidepoint(pos):
+            self.stats.game_active = True
+            self.stats.reset_stats()
+            self.aliens.empty()
+            self.bullets.empty()
+            self.ship.center_ship()
 
     def _check_keydown_event(self,event):
                 #check for the right arrow key
@@ -67,6 +83,7 @@ class AlienInvasion:
         elif event.key == pygame.K_q:
             sys.exit()
         elif event.key == pygame.K_SPACE:
+            #It is because the bullet is displaying on the screen while freeze
             if self.stats.game_active:
                 self._fire_bullet()
             
@@ -188,6 +205,9 @@ class AlienInvasion:
         self.aliens.draw(self.screen)
         for bullet in self.bullets.sprites():
             bullet.draw_bullet()
+        #Draw the play button when the game is inactive
+        if not self.stats.game_active:
+            self.play_button.draw_button()
         #Draw the most recent of the screen.
         pygame.display.flip()
          
