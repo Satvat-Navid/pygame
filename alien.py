@@ -1,5 +1,6 @@
 import pygame
 from pygame.sprite import Sprite
+from random import randint
 
 class Alien(Sprite):
     """Represent the single alien in the fleet"""
@@ -8,7 +9,7 @@ class Alien(Sprite):
         self.screen = ai_game.screen
         self.settings = ai_game.settings
         if self.settings.night_mode:
-            self.image = pygame.image.load('Images/alien_ship.bmp')
+            self.image = pygame.image.load('Images/alien_ship.png')
         else:
             self.image = pygame.image.load('Images/alien_ship02.bmp')
         self.rect = self.image.get_rect()
@@ -22,10 +23,29 @@ class Alien(Sprite):
         screen_rect = self.screen.get_rect()
         if self.rect.left <= 0 or self.rect.right >= screen_rect.right :
             return True
+        
+    def check_change(self, l):
+        """rendomly change the direction of alien"""
+        screen_rect = self.screen.get_rect()
+        q_3 = (screen_rect.right)*5//8
+        q_1 = (screen_rect.right)*3//8
+        num = randint (q_3, screen_rect.right)
+        num_l = randint (10, q_1)
+        if self.rect.left == num and l == 0:
+            return True
+        if self.rect.left == num_l and l == 1:
+            return True
 
-    def update(self):
+
+    def update(self, num):
         """Move the alien to the right"""
-        self.x += (self.settings.alien_speed * self.settings.alien_direction)
-        self.rect.x = self.x
+        if num == 1:
+            self.x -= (self.settings.alien_speed)
+            self.rect.x = self.x
+        else:
+            self.x += (self.settings.alien_speed)
+            self.rect.x = self.x
 
+
+    
     
