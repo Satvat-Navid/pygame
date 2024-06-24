@@ -65,16 +65,18 @@ class AlienInvasion:
 
     def _check_mouse_pos(self, pos):
         """Start the game when clicked on play button"""
-        if self.play_button.rect.collidepoint(pos):
+        if self.play_button.rect.collidepoint(pos) and not self.stats.game_active:
             self.stats.game_active = True
             self.stats.reset_stats()
             self.aliens.empty()
             self.bullets.empty()
             self.ship.center_ship()
+            #make the cursor disapper
+            pygame.mouse.set_visible(False)
 
     def _check_keydown_event(self,event):
                 #check for the right arrow key
-        if event.key == pygame.K_RIGHT: 
+        if event.key == pygame.K_RIGHT:
             #update the flag for moving
             self.ship.moving_right = True
         elif event.key == pygame.K_LEFT:
@@ -154,6 +156,7 @@ class AlienInvasion:
             sleep(1)
         else:
             self.stats.game_active = False
+            pygame.mouse.set_visible(True)
 
     def _check_alien_bottom(self):
         """Look for the alien to reach the bottom"""

@@ -14,14 +14,14 @@ class Settings:
         self.ship_speed = 0.7
         self.ship_limit = 2
         #Setting for bullet
-        self.bullet_speed = 0.5
+        self.bullet_speed = 1.5
         self.bullet_height = 15
         self.bullet_width = 3
-        self.allowed_bullets = 200
+        self.allowed_bullets = 2
         #Number of stars
         self.stars = 1200
         #Alien settings
         self.alien_speed = 0.5
-        self.fleet_drop_speed = 50
+        self.fleet_drop_speed = 10
         #Represen the direction of the fleet , 1 represent right dir and -1 repesent left dir.
         self.alien_direction = 1
