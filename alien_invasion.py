@@ -9,6 +9,7 @@ from alien import Alien
 from stars import Star
 from random import randint
 from button import Button
+from scoreboard import Scoreboard
 
 class AlienInvasion:
     """Control all method for the game and its behavior"""
@@ -27,11 +28,11 @@ class AlienInvasion:
         self.ship = Ship(self)
         self.bullets = pygame.sprite.Group()
         self.aliens = pygame.sprite.Group()
-        self.aliens = pygame.sprite.Group()
         self.stars = pygame.sprite.Group()
         self._create_fleet()
         self._create_stars()
         self.play_button = Button(self, "Play")
+        self.sb = Scoreboard(self)
         # self.fire = False
 
     def run_game(self):
@@ -66,6 +67,7 @@ class AlienInvasion:
     def _check_mouse_pos(self, pos):
         """Start the game when clicked on play button"""
         if self.play_button.rect.collidepoint(pos) and not self.stats.game_active:
+            self.settings.initialise_dynamic_settings()
             self.stats.game_active = True
             self.stats.reset_stats()
             self.aliens.empty()
@@ -85,9 +87,7 @@ class AlienInvasion:
         elif event.key == pygame.K_q:
             sys.exit()
         elif event.key == pygame.K_SPACE:
-            #It is because the bullet is displaying on the screen while freeze
-            if self.stats.game_active:
-                self._fire_bullet()
+            self._fire_bullet()
             
     def _check_keyup_event(self,event):
         #check for the right arrow key
@@ -169,7 +169,7 @@ class AlienInvasion:
 
     def _fire_bullet(self):
         """Make a bullet and add to the group"""
-        if len(self.bullets) <= self.settings.allowed_bullets:
+        if len(self.bullets) < self.settings.allowed_bullets and self.stats.game_active:
             new_bullet = Bullet(self) 
             self.bullets.add(new_bullet)
 
@@ -189,6 +189,7 @@ class AlienInvasion:
             """remove the remaining bullets and creating new fleet"""
             self.bullets.empty()
             self._create_fleet()
+            self.settings.increase_speed()
 
     def _create_stars(self):
         if self.settings.night_mode:
@@ -206,11 +207,12 @@ class AlienInvasion:
         self.ship.blitme()
         #get the bullets from the group and draw them
         self.aliens.draw(self.screen)
-        for bullet in self.bullets.sprites():
-            bullet.draw_bullet()
+        self.sb.show_score()
         #Draw the play button when the game is inactive
         if not self.stats.game_active:
             self.play_button.draw_button()
+        for bullet in self.bullets.sprites():
+            bullet.draw_bullet()
         #Draw the most recent of the screen.
         pygame.display.flip()
          
