@@ -37,6 +37,11 @@ class Ship:
         
         self.rect.x = (self.x)
 
+    def center_ship(self):
+        """center the ship on screen"""
+        self.rect.midbottom = self.screen_rect.midbottom
+        self.x = float(self.rect.x)
+
     def blitme(self):
         #Using the blit function to drow the plane on screen
         self.screen.blit(self.image, self.rect)
