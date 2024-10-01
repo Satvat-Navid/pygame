@@ -18,10 +18,10 @@ class AlienInvasion:
         pygame.init()
         self.settings = Settings()
         # self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
-        # self.settings.display_width = self.screen.get_rect().width
-        # self.settings.display_height = self.screen.get_rect().height
-        self.screen = pygame.display.set_mode(
-            (self.settings.display_width, self.settings.display_height))
+        # SWITCH B/T FULL SCREEN TO CUSTAMISEABLE 
+        self.screen = pygame.display.set_mode((self.settings.display_width, self.settings.display_height))
+        self.settings.display_width = self.screen.get_rect().width
+        self.settings.display_height = self.screen.get_rect().height
         pygame.display.set_caption("Alien Invasion")
 
         self.stats = GameStats(self)
@@ -70,6 +70,9 @@ class AlienInvasion:
             self.settings.initialise_dynamic_settings()
             self.stats.game_active = True
             self.stats.reset_stats()
+            self.sb.prep_score()
+            self.sb.prep_level()
+            self.sb.prep_ships()
             self.aliens.empty()
             self.bullets.empty()
             self.ship.center_ship()
@@ -110,10 +113,10 @@ class AlienInvasion:
         """Create the fleet of aliens from create alien"""
         alien = Alien(self)
         alien_width, alien_height = alien.rect.size
-        available_space_x = self.settings.display_width - (alien_width)
+        available_space_x = self.screen.get_rect().width - (alien_width)
         number_aliens_x = available_space_x//(2*alien_width)
         ship_height = self.ship.rect.height
-        available_space_y = self.settings.display_height - 3*alien_height - ship_height
+        available_space_y = self.screen.get_rect().height - 3*alien_height - ship_height
         number_rows = available_space_y//(2*alien_height)
         for row_number in range(number_rows):
             for alien_number in range(number_aliens_x):
@@ -148,12 +151,13 @@ class AlienInvasion:
             self.stats.ship_left -= 1
             #get rid of the aliens and bullets
             self.aliens.empty()
+            self.sb.prep_ships()
             self.bullets.empty()
             #Pause the game and center the ship
             self._create_fleet()
             self.ship.center_ship()
             #Pause the ship 
-            sleep(1)
+            sleep(1.5)
         else:
             self.stats.game_active = False
             pygame.mouse.set_visible(True)
@@ -183,20 +187,27 @@ class AlienInvasion:
                 if bullet.rect.bottom <= 0:
                     self.bullets.remove(bullet)
         #check for the bullet tha have hit the alien and remove them
-        collisions = pygame.sprite.groupcollide(self.bullets, self.aliens, True, True)
+        collisions = pygame.sprite.groupcollide(self.bullets, self.aliens, False, True)
+        if collisions:
+            for aliens in collisions.values():
+                self.stats.score += self.settings.alien_points*(len(aliens))
+            self.sb.prep_score()
+            self.sb.check_high_score()
         #repopulate the fleet
         if not self.aliens:
             """remove the remaining bullets and creating new fleet"""
             self.bullets.empty()
             self._create_fleet()
             self.settings.increase_speed()
+            self.stats.level += 1
+            self.sb.prep_level()
 
     def _create_stars(self):
         if self.settings.night_mode:
             for num in range(self.settings.stars):
                 star = Star(self)
-                star.rect.x = randint(0, self.settings.display_width)
-                star.rect.y = randint(0, self.settings.display_height)
+                star.rect.x = randint(0, self.screen.get_rect().width)
+                star.rect.y = randint(0, self.screen.get_rect().height)
                 self.stars.add(star)
 
     def _update_screen(self):

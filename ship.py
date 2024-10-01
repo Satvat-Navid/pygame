@@ -1,8 +1,10 @@
 import pygame
+from pygame.sprite import Sprite
 
-class Ship:
+class Ship(Sprite):
     """Control all the funtions of ship"""
     def __init__(self,ai_game):
+        super().__init__()
         self.screen = ai_game.screen
         self.settings = ai_game.settings
         #We assign the rectangels of the screen to work with positions
