@@ -9,7 +9,7 @@ class Alien(Sprite):
         self.screen = ai_game.screen
         self.settings = ai_game.settings
         if self.settings.night_mode:
-            self.image = pygame.image.load('Images/alien_ship.png')
+            self.image = pygame.image.load('Images/alien_ship1.bmp')
         else:
             self.image = pygame.image.load('Images/alien_ship02.bmp')
         self.rect = self.image.get_rect()
