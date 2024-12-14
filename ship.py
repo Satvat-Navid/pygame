@@ -23,8 +23,8 @@ class Ship(Sprite):
 
         self.moving_right = False
         self.moving_left = False
-        self.up = False
-        self.down = False
+        self.moving_up = False
+        self.moving_down = False
 
     def update(self):
         """Update the x coordinate of the the plane"""
@@ -32,8 +32,10 @@ class Ship(Sprite):
             self.x += self.settings.ship_speed
         elif self.moving_left and self.rect.x > 0:
             self.x -= self.settings.ship_speed
-        # elif self.up and self.rect.y < 0:
-        #     self.
+        elif self.moving_up and self.rect.y > 0:
+            self.rect.y -= self.settings.ship_speed
+        elif self.moving_down and self.rect.y < (self.settings.display_height - 10):
+            self.rect.y += self.settings.ship_speed
         
         self.rect.x = (self.x)
 
