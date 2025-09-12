@@ -11,12 +11,8 @@ class Ship(Sprite):
         self.screen_rect = ai_game.screen.get_rect()
 
         #Loading the image and getting its rect
-        if self.settings.night_mode:
-            self.image = pygame.image.load('Images/plane1.bmp')
-        else:
-            self.image = pygame.image.load('Images/plane01.bmp')
-        self.rect = self.image.get_rect()
         #Setting the locaton of both the screen and the image rect.
+        self.center_ship()
         self.rect.midbottom = self.screen_rect.midbottom
 
         self.x = float(self.rect.x)
@@ -41,6 +37,11 @@ class Ship(Sprite):
 
     def center_ship(self):
         """center the ship on screen"""
+        if self.settings.night_mode:
+            self.image = pygame.image.load('Images/plane1.bmp')
+        else:
+            self.image = pygame.image.load('Images/plane01.bmp')
+        self.rect = self.image.get_rect()
         self.rect.midbottom = self.screen_rect.midbottom
         self.x = float(self.rect.x)
 

@@ -1,4 +1,5 @@
 import pygame.font
+from pygame.sprite import Sprite
 class Button:
     def __init__(self, ai_game, msg):
         self.screen = ai_game.screen
@@ -24,3 +25,21 @@ class Button:
         """render the button rect and msg text"""
         self.screen.fill(self.button_color, self.rect)
         self.screen.blit(self.msg_image, self.msg_image_rect)
+
+
+class ThemeButton(Sprite):
+    """Button for changing the theme"""
+    def __init__(self, ai_game):
+        super().__init__()
+        self.screen = ai_game.screen
+        self.screen_rect = self.screen.get_rect()
+        # self.settings = ai_game.settings
+        self.image = pygame.image.load('Images/theme.bmp')
+        self.rect = self.image.get_rect()
+        self.rect.right = self.screen_rect.right 
+        self.rect.y = 85
+
+    def blitme(self):
+        #Using the blit function to drow the button on screen
+        self.screen.blit(self.image, self.rect)
+

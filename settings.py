@@ -4,12 +4,6 @@ class Settings:
         self.display_height = 600
         self.display_width = 849
         self.night_mode = True
-        if self.night_mode:
-            self.bg_color = (0, 0, 0)
-            self.bullet_color = (255,255,0)
-        else:
-            self.bullet_color = (0,0,0)
-            self.bg_color = (255, 255, 255)
         #ship settings
         self.ship_limit = 3
         #Setting for bullet
@@ -24,6 +18,12 @@ class Settings:
         self.initialise_dynamic_settings()
 
     def initialise_dynamic_settings(self):
+        if self.night_mode:
+            self.bg_color = (0, 0, 0)
+            self.bullet_color = (255,255,0)
+        else:
+            self.bullet_color = (0,0,0)
+            self.bg_color = (255, 255, 255)
         self.ship_speed = 0.7
         self.bullet_speed = 0.9
         self.allowed_bullets = 30

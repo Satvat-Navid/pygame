@@ -11,7 +11,7 @@ class Alien(Sprite):
         if self.settings.night_mode:
             self.image = pygame.image.load('Images/alien_ship1.bmp')
         else:
-            self.image = pygame.image.load('Images/alien_ship02.bmp')
+            self.image = pygame.image.load('Images/alien_ship1.bmp')
         self.rect = self.image.get_rect()
         #set the position of the alien to the top left corner with space equal to height and width
         self.rect.x =  self.rect.width

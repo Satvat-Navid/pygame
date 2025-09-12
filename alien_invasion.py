@@ -8,7 +8,7 @@ from bullet import Bullet
 from alien import Alien
 from stars import Star
 from random import randint
-from button import Button
+from button import Button, ThemeButton
 from scoreboard import Scoreboard
 
 class AlienInvasion:
@@ -33,6 +33,7 @@ class AlienInvasion:
         self._create_fleet()
         self._create_stars()
         self.play_button = Button(self, "Play")
+        self.theme_button = ThemeButton(self)
         self.sb = Scoreboard(self)
         # self.fire = False
 
@@ -80,6 +81,15 @@ class AlienInvasion:
             self.ship.center_ship()
             #make the cursor disapper
             pygame.mouse.set_visible(False)
+        elif self.theme_button.rect.collidepoint(pos) and not self.stats.game_active:
+            self.settings.night_mode = not self.settings.night_mode
+            self.settings.initialise_dynamic_settings()
+            self.sb.prep_score()
+            self.sb.prep_high_score()
+            self.sb.prep_level()
+            self.sb.prep_ships()
+            self.sb.show_score()
+            self.ship.center_ship()
 
     def _check_keydown_event(self,event):
                 #check for the right arrow key
@@ -263,8 +273,8 @@ class AlienInvasion:
 
     def _update_screen(self):
         self.screen.fill(self.settings.bg_color)
-        # if self.settings.night_mode:
-        self.stars.draw(self.screen)
+        if self.settings.night_mode:
+            self.stars.draw(self.screen)
         #Draw the ship on screen
         self.ship.blitme()
         #get the bullets from the group and draw them
@@ -273,6 +283,8 @@ class AlienInvasion:
         #Draw the play button when the game is inactive
         if not self.stats.game_active:
             self.play_button.draw_button()
+        if not self.stats.game_active:
+            self.theme_button.blitme()
         for bullet in self.bullets.sprites():
             bullet.draw_bullet()
         #Draw the most recent of the screen.
