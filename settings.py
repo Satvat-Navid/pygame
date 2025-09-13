@@ -3,7 +3,7 @@ class Settings:
     def __init__(self):
         self.display_height = 600
         self.display_width = 849
-        self.night_mode = True
+        self.night_mode = False
         if self.night_mode:
             self.bg_color = (0, 0, 0)
             self.bullet_color = (255,255,0)
@@ -24,10 +24,10 @@ class Settings:
         self.initialise_dynamic_settings()
 
     def initialise_dynamic_settings(self):
-        self.ship_speed = 0.7
-        self.bullet_speed = 0.9
+        self.ship_speed = 1.7
+        self.bullet_speed = 1.9
         self.allowed_bullets = 30
-        self.alien_speed = 0.3
+        self.alien_speed = 1.3
         self.alien_points = 50
         #Represen the direction of the fleet , 1 represent right dir and -1 repesent left dir.
         self.alien_direction = 1
